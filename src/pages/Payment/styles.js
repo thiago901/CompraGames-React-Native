@@ -1,19 +1,24 @@
 import styled from 'styled-components/native';
+import { Dimensions } from 'react-native';
 
 export const Container = styled.View`
   padding: 10px;
-  justify-content: center;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1;
 `;
-export const ProcessPayment = styled.ScrollView.attrs({
+export const ProcessPayment = styled.FlatList.attrs({
   horizontal: true,
   showsHorizontalScrollIndicator: false,
+  scrollEnabled: false,
 })``;
 export const ItemScrollContainer = styled.View`
-  width: 400px;
+  width: ${Dimensions.get('window').width - 25};
   background: #fff;
   padding: 20px;
   border-radius: 4px;
   margin-right: 50px;
+  align-self: center;
 `;
 export const Street = styled.Text`
   font-size: 20px;
@@ -65,7 +70,6 @@ export const TitleCartContainer = styled.Text`
 export const TitleCartValidation = styled.Text``;
 export const CartContainer = styled.View`
   margin-top: 10px;
-  flex: 1;
 `;
 export const DataCartContainer = styled.View`
   flex-direction: row;
@@ -97,30 +101,30 @@ export const TextSelectPayment = styled.View`
   justify-content: center;
 `;
 
-
 export const ButtonContainer = styled.View`
   flex-direction: row;
   justify-content: center;
-
 `;
 
-export const PaymentsContainer = styled.View`
+export const PaymentsContainer = styled.ScrollView.attrs({
+  horizontal: true,
+  showsHorizontalScrollIndicator: false,
+})`
   margin-top: 20px;
 `;
 export const CreditContainer = styled.View`
-/*margin-right: 500px; ////////////////////////////////////////////////////////////POG */
+  width: 350px;
 `;
 export const TextCardData = styled.TextInput`
   font-size: 16px;
-  background-color: #E6E6E6;
+  background-color: #e6e6e6;
 `;
 export const DateCardContainer = styled.View`
   flex-direction: row;
-  background-color: #E6E6E6;
-  padding: 2px
+  background-color: #e6e6e6;
+  padding: 2px;
 `;
 export const ButtonCardData = styled.TextInput`
-  margin-right: 160px;
   font-size: 16px;
 `;
 
@@ -152,20 +156,38 @@ export const TextCardTitle = styled.Text`
 export const TitlePaymentContainer = styled.View`
   flex-direction: row;
 `;
-export const ButtonSelectCard = styled.TouchableOpacity`
-`;
+export const ButtonSelectCard = styled.TouchableOpacity``;
 
 export const BankSlipContainer = styled.View`
-  margin-right: 500px;/* ////////////////////////////////////////////////////////////POG */
-  padding: 0px 100px 0px 0px;
+  width: 350px;
 `;
 
-export const PrinterContainer = styled.View`
-`;
+export const PrinterContainer = styled.View``;
 export const IconContainer = styled.View`
   flex-direction: row;
 `;
 export const TextBankSlipDescription = styled.Text`
   font-size: 16px;
   margin-left: 10px;
+  width: 350px;
+`;
+
+export const ButtonsNextBack = styled.View`
+  flex-direction: row;
+  margin-bottom: 50px;
+  margin-top: 20px;
+  align-items: center;
+  justify-content: space-around;
+  width: ${Dimensions.get('window').width - 25};
+`;
+
+export const ButtonController = styled.TouchableOpacity`
+  background: #22272a;
+  width: 80px;
+  height: 80px;
+
+  border-radius: 40px;
+
+  justify-content: center;
+  align-items: center;
 `;
