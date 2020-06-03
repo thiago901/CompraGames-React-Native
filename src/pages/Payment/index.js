@@ -44,11 +44,10 @@ import {
   ButtonController,
 } from './styles';
 
-const Payment = () => {
+const Payment = ({ navigation }) => {
   let flatListPayment = useRef();
   let flatMenuList = useRef();
   const [proxItem, setProxItem] = useState(1);
-  const [lengthMenu] = useState(2);
 
   function banckSlip() {
     flatListPayment.scrollToEnd({ animated: true });
@@ -58,22 +57,23 @@ const Payment = () => {
   }
 
   function next() {
-    if (proxItem <= lengthMenu) {
+    if (proxItem === 1){
       flatMenuList.scrollToIndex({ animated: true, index: proxItem });
-      if (proxItem === lengthMenu) {
-        setProxItem(lengthMenu);
-      } else {
-        setProxItem(proxItem + 1);
-      }
+      setProxItem(2);
+    }
+    else if (proxItem === 2){
+      flatMenuList.scrollToIndex({ animated: true, index: proxItem });
+      setProxItem(3);
     }
   }
   function back() {
-    if (proxItem > 0) {
-      flatMenuList.scrollToIndex({ animated: true, index: proxItem - 1 });
-      setProxItem(proxItem - 1);
-    }
-    if (proxItem === 0) {
+    if (proxItem === 2){
+      flatMenuList.scrollToIndex({ animated: true, index: 0 });
       setProxItem(1);
+    }
+    else if (proxItem === 3){
+      flatMenuList.scrollToIndex({ animated: true, index: 1 });
+      setProxItem(2);
     }
   }
 
@@ -109,7 +109,10 @@ const Payment = () => {
           </TitleCartContainer>
           <CartContainer>
             <DataCartContainer>
-              <ItemCartName>1 Produto visualizar</ItemCartName>
+              <ItemCartName>1 Produto </ItemCartName>
+              <ButtonSelectCard onPress={() => navigation.navigate('Cart')}>
+                  <Icon name="open-in-new" size={20} color="#000" />
+              </ButtonSelectCard>
               <PriceProductsCart>R$85,10</PriceProductsCart>
             </DataCartContainer>
             <DataCartContainer>
@@ -170,6 +173,11 @@ const Payment = () => {
                   Selecione para salvar seu cartão
                 </TextFinalizeSale>
               </ButtonSaveCard>
+              <ButtonFinalizeSale>
+                <TextFinalizeSale>
+                  Pagar com cartão
+                </TextFinalizeSale>
+              </ButtonFinalizeSale>
             </CreditContainer>
             <BankSlipContainer>
               <PrinterContainer>

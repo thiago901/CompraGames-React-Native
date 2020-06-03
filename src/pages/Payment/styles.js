@@ -12,7 +12,9 @@ export const ProcessPayment = styled.FlatList.attrs({
   showsHorizontalScrollIndicator: false,
   scrollEnabled: false,
 })``;
-export const ItemScrollContainer = styled.View`
+export const ItemScrollContainer = styled.ScrollView.attrs({
+  showsVerticalScrollIndicator: false,
+})`
   width: ${Dimensions.get('window').width - 25};
   background: #fff;
   padding: 20px;
@@ -109,6 +111,7 @@ export const ButtonContainer = styled.View`
 export const PaymentsContainer = styled.ScrollView.attrs({
   horizontal: true,
   showsHorizontalScrollIndicator: false,
+  scrollEnabled: false,
 })`
   margin-top: 20px;
 `;
@@ -156,7 +159,8 @@ export const TextCardTitle = styled.Text`
 export const TitlePaymentContainer = styled.View`
   flex-direction: row;
 `;
-export const ButtonSelectCard = styled.TouchableOpacity``;
+export const ButtonSelectCard = styled.TouchableOpacity`
+`;
 
 export const BankSlipContainer = styled.View`
   width: 350px;
@@ -174,11 +178,12 @@ export const TextBankSlipDescription = styled.Text`
 
 export const ButtonsNextBack = styled.View`
   flex-direction: row;
-  margin-bottom: 50px;
+  margin-bottom: 10px;
   margin-top: 20px;
   align-items: center;
   justify-content: space-around;
   width: ${Dimensions.get('window').width - 25};
+
 `;
 
 export const ButtonController = styled.TouchableOpacity`
