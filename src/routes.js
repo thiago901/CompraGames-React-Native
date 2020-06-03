@@ -12,6 +12,8 @@ import Payment from './pages/Payment';
 import HeaderLeft from './components/Header/HeaderLeft';
 import HeaderRight from './components/Header/HeaderRight';
 
+import ConfirmPayment from './components/ConfirmPayment';
+
 const Stack = createStackNavigator();
 
 export default function routes() {
@@ -62,6 +64,13 @@ export default function routes() {
               headerRight: () => <HeaderLeft navigation={navigation} />,
               headerTitle: false,
               headerBackTitle: false,
+            })}
+          />
+          <Stack.Screen
+            name="ConfirmPayment"
+            component={ConfirmPayment}
+            options={({ navigation }) => ({
+              headerShown: false,
             })}
           />
         </Stack.Navigator>

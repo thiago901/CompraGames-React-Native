@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import Background from '../../components/Background';
+
 import {
   Container,
   ProcessPayment,
@@ -24,17 +24,8 @@ import {
   ButtonSelectPayment,
   ButtonContainer,
   PaymentsContainer,
-  CreditContainer,
-  TextCardData,
-  DateCardContainer,
-  ButtonCardData,
-  ButtonFinalizeSale,
-  ButtonSaveCard,
-  TextFinalizeSale,
-  TextCardTitle,
   TextIconName,
   TextSelectPayment,
-  TitlePaymentContainer,
   ButtonSelectCard,
   BankSlipContainer,
   PrinterContainer,
@@ -44,10 +35,23 @@ import {
   ButtonController,
 } from './styles';
 
+import Background from '../../components/Background';
+import ChangeAddress from '../../components/Address/ChangeAddress';
+import AddAddress from '../../components/Address/AddAddress';
+
+import FormNewCreditCard from '../../components/CreditCard/FormNew';
+import ListCards from '../../components/CreditCard/ListCards';
+
+import ConfirmPayment from '../../components/ConfirmPayment';
+
 const Payment = ({ navigation }) => {
   let flatListPayment = useRef();
   let flatMenuList = useRef();
   const [proxItem, setProxItem] = useState(1);
+
+  const [openChangeAddress, setOpenChangeAddress] = useState(false);
+  const [openAddAddress, setOpenAddAddress] = useState(false);
+  const [openAddCart, setOpenAddCart] = useState(false);
 
   function banckSlip() {
     flatListPayment.scrollToEnd({ animated: true });
@@ -57,21 +61,21 @@ const Payment = ({ navigation }) => {
   }
 
   function next() {
-    if (proxItem === 1){
+    if (proxItem === 1) {
       flatMenuList.scrollToIndex({ animated: true, index: proxItem });
       setProxItem(2);
-    }
-    else if (proxItem === 2){
+    } else if (proxItem === 2) {
       flatMenuList.scrollToIndex({ animated: true, index: proxItem });
       setProxItem(3);
+    } else if (proxItem === 3) {
+      navigation.navigate('ConfirmPayment');
     }
   }
   function back() {
-    if (proxItem === 2){
+    if (proxItem === 2) {
       flatMenuList.scrollToIndex({ animated: true, index: 0 });
       setProxItem(1);
-    }
-    else if (proxItem === 3){
+    } else if (proxItem === 3) {
       flatMenuList.scrollToIndex({ animated: true, index: 1 });
       setProxItem(2);
     }
@@ -82,17 +86,22 @@ const Payment = ({ navigation }) => {
       id: 1,
       component: (
         <ItemScrollContainer>
+          <AddAddress visible={openAddAddress} closeModal={setOpenAddAddress} />
+          <ChangeAddress
+            visible={openChangeAddress}
+            closeModal={setOpenChangeAddress}
+          />
           <Street>Rua 1, 350</Street>
           <City>São Paulo - SP</City>
           <Cep>05847-120</Cep>
           <AddressButtonsContainer>
-            <UpdateAddressesButton>
+            <UpdateAddressesButton onPress={() => setOpenChangeAddress(true)}>
               <Icon name="home" size={20} color="#000" />
               <UpdateAddressesButtonText>
                 Alterar endereço
               </UpdateAddressesButtonText>
             </UpdateAddressesButton>
-            <AddAddressesButton>
+            <AddAddressesButton onPress={() => setOpenAddAddress(true)}>
               <Icon name="add" size={20} color="#000" />
               <AddAddressesButtonText>Add endereço</AddAddressesButtonText>
             </AddAddressesButton>
@@ -109,9 +118,9 @@ const Payment = ({ navigation }) => {
           </TitleCartContainer>
           <CartContainer>
             <DataCartContainer>
-              <ItemCartName>1 Produto </ItemCartName>
               <ButtonSelectCard onPress={() => navigation.navigate('Cart')}>
-                  <Icon name="open-in-new" size={20} color="#000" />
+                <ItemCartName>1 Produto </ItemCartName>
+                <Icon name="open-in-new" size={20} color="#000" />
               </ButtonSelectCard>
               <PriceProductsCart>R$85,10</PriceProductsCart>
             </DataCartContainer>
@@ -147,38 +156,12 @@ const Payment = ({ navigation }) => {
               flatListPayment = ref;
             }}
           >
-            <CreditContainer>
-              <TitlePaymentContainer>
-                <TextCardTitle>Escolher cartão</TextCardTitle>
-                <ButtonSelectCard>
-                  <Icon name="open-in-new" size={20} color="#000" />
-                </ButtonSelectCard>
-              </TitlePaymentContainer>
-              <TextCardData
-                autoCapitalize="words"
-                placeholder="Nome Impresso no cartão"
-              />
-              <TextCardData
-                keyboardType="numeric"
-                placeholder="Número do cartão"
-              />
-              <DateCardContainer>
-                <ButtonCardData placeholder="Mês" />
-                <ButtonCardData placeholder="Ano" />
-              </DateCardContainer>
-              <TextCardData keyboardType="numeric" placeholder="CVV" />
-              <TextCardData keyboardType="numeric" placeholder="Parcelar em" />
-              <ButtonSaveCard>
-                <TextFinalizeSale>
-                  Selecione para salvar seu cartão
-                </TextFinalizeSale>
-              </ButtonSaveCard>
-              <ButtonFinalizeSale>
-                <TextFinalizeSale>
-                  Pagar com cartão
-                </TextFinalizeSale>
-              </ButtonFinalizeSale>
-            </CreditContainer>
+            <FormNewCreditCard
+              visible={openAddCart}
+              closeModal={setOpenAddCart}
+            />
+            <ListCards setOpenAddCart={setOpenAddCart} />
+
             <BankSlipContainer>
               <PrinterContainer>
                 <IconContainer>

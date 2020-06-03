@@ -2,7 +2,7 @@ import styled from 'styled-components/native';
 import { Dimensions } from 'react-native';
 
 export const Container = styled.View`
-  padding: 10px;
+  margin-left: 10px;
   justify-content: space-between;
   align-items: center;
   flex: 1;
@@ -15,7 +15,7 @@ export const ProcessPayment = styled.FlatList.attrs({
 export const ItemScrollContainer = styled.ScrollView.attrs({
   showsVerticalScrollIndicator: false,
 })`
-  width: ${Dimensions.get('window').width - 25};
+  width: ${Dimensions.get('window').width - 15};
   background: #fff;
   padding: 20px;
   border-radius: 4px;
@@ -115,9 +115,7 @@ export const PaymentsContainer = styled.ScrollView.attrs({
 })`
   margin-top: 20px;
 `;
-export const CreditContainer = styled.View`
-  width: 350px;
-`;
+export const CreditContainer = styled.View``;
 export const TextCardData = styled.TextInput`
   font-size: 16px;
   background-color: #e6e6e6;
@@ -160,20 +158,22 @@ export const TitlePaymentContainer = styled.View`
   flex-direction: row;
 `;
 export const ButtonSelectCard = styled.TouchableOpacity`
+  flex-direction: row;
 `;
 
 export const BankSlipContainer = styled.View`
-  width: 350px;
+  width: 340px;
 `;
 
 export const PrinterContainer = styled.View``;
 export const IconContainer = styled.View`
   flex-direction: row;
+  align-items: center;
 `;
 export const TextBankSlipDescription = styled.Text`
   font-size: 16px;
   margin-left: 10px;
-  width: 350px;
+  width: 260px;
 `;
 
 export const ButtonsNextBack = styled.View`
@@ -183,7 +183,6 @@ export const ButtonsNextBack = styled.View`
   align-items: center;
   justify-content: space-around;
   width: ${Dimensions.get('window').width - 25};
-
 `;
 
 export const ButtonController = styled.TouchableOpacity`
