@@ -24,7 +24,7 @@ export default function routes() {
       <NavigationContainer>
         <StatusBar backgroundColor="#de4e3a" barStyle="light-content" />
         <Stack.Navigator>
-        <Stack.Screen
+          <Stack.Screen
             name="SignIn"
             component={SignIn}
             options={({ navigation }) => ({

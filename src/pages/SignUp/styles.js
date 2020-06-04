@@ -21,6 +21,8 @@ export const Input = styled.TextInput`
   margin-bottom: 10px;
   font-size: 16px;
   border-radius: 4px;
+  flex: ${props => props.widthMax ?'1' : 'none'};
+  margin-right: ${props => props.spaceMargin || '0'}px;
 `;
 
 export const Button = styled.TouchableOpacity`
@@ -36,7 +38,7 @@ export const TextButton = styled.Text`
 `;
 export const FormSpecify = styled.View`
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between;
 `;
 export const InputSpecify = styled.TextInput`
   background: white;

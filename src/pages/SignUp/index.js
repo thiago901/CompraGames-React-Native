@@ -24,17 +24,17 @@ const SignUp = ({navigation}) => {
         <Form>
           <TextTitle>CompreGames.com</TextTitle>
           <Input placeholder="Informe o seu nome"/>
-          <Input placeholder="Informe o seu cpf"/>
+          <Input placeholder="Informe o seu CPF"/>
           <FormSpecify>
-            <InputSpecify placeholder="CEP"/>
-            <InputSpecify placeholder="Número"/>
-            <InputSpecify placeholder="Complemento"/>
+            <Input widthMax spaceMargin={10} placeholder="CEP"/>
+            <Input widthMax spaceMargin={10} placeholder="Número"/>
+            <Input widthMax placeholder="Complemento"/>
           </FormSpecify>
+          <Input placeholder="Rua"/>
+          <Input placeholder="Bairro"/>
           <FormSpecify>
-            <InputSpecify placeholder="Rua"/>
-            <InputSpecify placeholder="Bairro"/>
-            <InputSpecify placeholder="UF"/>
-            <InputSpecify placeholder="Cidade"/>
+            <Input widthMax spaceMargin={10} placeholder="UF"/>
+            <Input widthMax placeholder="Cidade"/>
           </FormSpecify>
           <Input placeholder="Informe o seu email"/>
           <Input placeholder="Digite sua senha"/>

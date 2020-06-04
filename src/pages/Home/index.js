@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import api from '../../services/api'
 
 import {
   Container,
@@ -16,9 +17,18 @@ import {
 } from './styles';
 import Background from '../../components/Background';
 
-import products from '../../services/teste';
-
 const Home = ({ navigation }) => {
+  const [products, setProducts] = useState([]);
+
+  useEffect(()=>{
+    async function load(){
+      const resp = await api.get('/products');
+      console.tron.warn(resp);
+      setProducts(resp.data);
+    }
+    load();
+  },[]);
+
   return (
     <Background>
       <Container>
@@ -43,13 +53,13 @@ const Home = ({ navigation }) => {
               <ImgContainer
                 onPress={() =>
                   navigation.navigate('Product', {
-                    product: item,
+                    product_id: item.id,
                   })
                 }
               >
                 <Img
                   source={{
-                    uri: item.images[0].image,
+                    uri: 'https://images-americanas.b2w.io/produtos/01/00/img/1227812/3/1227812329_1GG.jpg',
                   }}
                 />
               </ImgContainer>
