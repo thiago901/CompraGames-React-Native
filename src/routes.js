@@ -8,6 +8,8 @@ import Home from './pages/Home';
 import Cart from './pages/Cart';
 import Product from './pages/Product';
 import Payment from './pages/Payment';
+import SignIn from './pages/SignIn';
+import SignUp from './pages/SignUp';
 
 import HeaderLeft from './components/Header/HeaderLeft';
 import HeaderRight from './components/Header/HeaderRight';
@@ -22,6 +24,20 @@ export default function routes() {
       <NavigationContainer>
         <StatusBar backgroundColor="#de4e3a" barStyle="light-content" />
         <Stack.Navigator>
+        <Stack.Screen
+            name="SignIn"
+            component={SignIn}
+            options={({ navigation }) => ({
+              headerShown: false,
+            })}
+          />
+          <Stack.Screen
+            name="SignUp"
+            component={SignUp}
+            options={({ navigation }) => ({
+              headerShown: false,
+            })}
+          />
           <Stack.Screen
             name="Home"
             component={Home}

@@ -13,7 +13,7 @@ import styled from 'styled-components/native';
   #22272a
 */
 export const Container = styled.View`
-  background: #de4e3a;
+  background: ${props=> props.color || '#de4e3a'};
   flex: 1;
   justify-content: ${(props) => (props.center ? 'center' : 'flex-start')};
 `;
