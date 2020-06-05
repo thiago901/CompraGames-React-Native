@@ -163,6 +163,7 @@ export const ButtonSelectCard = styled.TouchableOpacity`
 
 export const BankSlipContainer = styled.View`
   width: 340px;
+  justify-content: space-between;
 `;
 
 export const PrinterContainer = styled.View``;
@@ -194,4 +195,16 @@ export const ButtonController = styled.TouchableOpacity`
 
   justify-content: center;
   align-items: center;
+`;
+
+export const ButtonPaySlip = styled.TouchableOpacity`
+  margin-top: 10px;
+  background: #222;
+  padding: 10px;
+`;
+export const TextButtomPay = styled.Text`
+  text-align: center;
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
 `;

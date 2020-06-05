@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useDispatch } from 'react-redux';
 import api from '../../services/api';
+import { formatNumber } from '../../util/format';
 
 import {
   Container,
@@ -15,9 +17,11 @@ import {
   Price,
   ButtonAddCard,
   TextButtonAddCard,
+  ButtonLogout,
 } from './styles';
 import Background from '../../components/Background';
 import { addToCartRequest } from '../../store/module/cart/actions';
+import { signOutRequest } from '../../store/module/auth/actions';
 
 const Home = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -26,8 +30,11 @@ const Home = ({ navigation }) => {
   useEffect(() => {
     async function load() {
       const resp = await api.get('/products');
-      console.tron.warn(resp);
-      setProducts(resp.data);
+      const data = resp.data.map((d) => ({
+        ...d,
+        priceFormat: formatNumber(d.price),
+      }));
+      setProducts(data);
     }
     load();
   }, []);
@@ -36,6 +43,9 @@ const Home = ({ navigation }) => {
     dispatch(addToCartRequest(id));
   }
 
+  function handleLogout() {
+    dispatch(signOutRequest());
+  }
   return (
     <Background>
       <Container>
@@ -50,6 +60,10 @@ const Home = ({ navigation }) => {
           <TextMenu>Consoles</TextMenu>
           <TextMenu>Promoções</TextMenu>
           <TextMenu>Novidades</TextMenu>
+          <ButtonLogout onPress={handleLogout}>
+            <TextMenu rightMargin={10}>Sair</TextMenu>
+            <Icon name="exit-to-app" color="#222" size={30} />
+          </ButtonLogout>
         </Menu>
 
         <Products
@@ -72,7 +86,7 @@ const Home = ({ navigation }) => {
                 />
               </ImgContainer>
               <Name>{item.title}</Name>
-              <Price>{item.price}</Price>
+              <Price>{item.priceFormat}</Price>
               <ButtonAddCard onPress={() => handleAddProduct(item.id)}>
                 <TextButtonAddCard>ADICIONAR AO CARRINHO</TextButtonAddCard>
               </ButtonAddCard>

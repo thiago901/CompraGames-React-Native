@@ -20,6 +20,7 @@ export const TextMenu = styled.Text`
   font-size: 20px;
   font-weight: bold;
   margin-bottom: 10px;
+  margin-right: ${(props) => (props.rightMargin ? props.rightMargin : 0)}px;
 `;
 
 export const Products = styled.FlatList.attrs({
@@ -66,4 +67,8 @@ export const TextButtonAddCard = styled.Text`
   color: #fff;
   font-size: 16px;
   font-weight: bold;
+`;
+export const ButtonLogout = styled.TouchableOpacity`
+  flex-direction: row;
+  justify-content: center;
 `;

@@ -27,7 +27,7 @@ export const InputForm = styled.TextInput.attrs({
   color: #fff;
   font-size: 16px;
 `;
-export const ButtonSave = styled(RectButton)`
+export const ButtonSave = styled.TouchableOpacity`
   padding: 10px;
   background: #6fa1cd;
   justify-content: center;

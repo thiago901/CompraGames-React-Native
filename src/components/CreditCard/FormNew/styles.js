@@ -24,7 +24,7 @@ export const ButtonCardData = styled.TextInput`
 
 export const ButtonSaveCard = styled.TouchableOpacity`
   margin-top: 20px;
-  background: #de4e3a;
+  background: #222;
   border-radius: 4px;
   padding: 15px;
 `;

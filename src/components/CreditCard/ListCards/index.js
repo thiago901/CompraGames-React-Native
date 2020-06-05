@@ -1,5 +1,6 @@
-import React from 'react';
-
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import api from '../../../services/api';
 import {
   Container,
   SelectButtom,
@@ -10,18 +11,39 @@ import {
   ButtonAddCreditCartText,
 } from './styles';
 
-const ListCards = ({ setOpenAddCart }) => {
+const ListCards = ({ setOpenAddCart, setCardSelect }) => {
+  const [listCards, setListCards] = useState([]);
+  const { profile } = useSelector((state) => state.user);
+  useEffect(() => {
+    async function load() {
+      const response = await api.get(`/cards/${profile.client.id}`);
+      setListCards(response.data);
+    }
+    load();
+  }, []);
+
+  function selectCard(id) {
+    setOpenAddCart(true);
+    setCardSelect(id);
+  }
+  function handleNewCard() {
+    setOpenAddCart(true);
+    setCardSelect(null);
+  }
   return (
     <Container>
-      <SelectButtom>
-        <CardContainer>
-          <Name>Thiago</Name>
-          <Item>Número: 123456789123</Item>
-          <Item>Mês: 06</Item>
-          <Item>Ano: 2039</Item>
-        </CardContainer>
-      </SelectButtom>
-      <ButtonAddCreditCart onPress={() => setOpenAddCart(true)}>
+      {listCards.map((c) => (
+        <SelectButtom key={c.id} onPress={() => selectCard(c)}>
+          <CardContainer>
+            <Name>{c.card_owner}</Name>
+            <Item>{`Número: ${c.card_number}`} </Item>
+            <Item>{`Mês: ${c.month}`}</Item>
+            <Item>{`Ano: ${c.year}`}</Item>
+          </CardContainer>
+        </SelectButtom>
+      ))}
+
+      <ButtonAddCreditCart onPress={handleNewCard}>
         <ButtonAddCreditCartText>Novo Cartão</ButtonAddCreditCartText>
       </ButtonAddCreditCart>
     </Container>

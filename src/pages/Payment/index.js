@@ -1,5 +1,6 @@
-import React, { useRef, useState } from 'react';
-
+import React, { useEffect, useRef, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import {
@@ -33,25 +34,66 @@ import {
   TextBankSlipDescription,
   ButtonsNextBack,
   ButtonController,
+  ButtonPaySlip,
+  TextButtomPay,
 } from './styles';
-
+import api from '../../services/api';
 import Background from '../../components/Background';
 import ChangeAddress from '../../components/Address/ChangeAddress';
 import AddAddress from '../../components/Address/AddAddress';
+import { formatNumber } from '../../util/format';
 
 import FormNewCreditCard from '../../components/CreditCard/FormNew';
 import ListCards from '../../components/CreditCard/ListCards';
 
-import ConfirmPayment from '../../components/ConfirmPayment';
+import { clearCart } from '../../store/module/cart/actions';
 
 const Payment = ({ navigation }) => {
   let flatListPayment = useRef();
   let flatMenuList = useRef();
+  const dispatch = useDispatch();
+  const { profile } = useSelector((state) => state.user);
+  const cartSize = useSelector((state) => state.cart.cart.length);
+  const cart = useSelector((state) => state.cart.cart);
+  const cartList = useSelector((state) =>
+    state.cart.cart.map((product) => ({
+      amount: product.amount,
+      unit_price: product.price,
+      product_id: product.id,
+    }))
+  );
+  const [loading, setLoading] = useState(false);
   const [proxItem, setProxItem] = useState(1);
 
   const [openChangeAddress, setOpenChangeAddress] = useState(false);
   const [openAddAddress, setOpenAddAddress] = useState(false);
   const [openAddCart, setOpenAddCart] = useState(false);
+
+  const [addressCurrent, setAddressCurrent] = useState({});
+  const [cardSelect, setCardSelect] = useState();
+
+  const cartSubTotal = formatNumber(
+    cart.reduce((t, p) => {
+      return t + p.amount * p.price;
+    }, 0)
+  );
+  const cartTotal = formatNumber(
+    cart.reduce((t, p) => {
+      return t + p.amount * p.price;
+    }, 0) + 20
+  );
+
+  useEffect(() => {
+    async function load() {
+      setLoading(true);
+      const response = await api.get(
+        `/addressesCurrent/client/${profile.client.id}`
+      );
+      setAddressCurrent(response.data);
+      setLoading(false);
+    }
+    load();
+  }, []);
 
   function banckSlip() {
     flatListPayment.scrollToEnd({ animated: true });
@@ -66,10 +108,12 @@ const Payment = ({ navigation }) => {
       setProxItem(2);
     } else if (proxItem === 2) {
       flatMenuList.scrollToIndex({ animated: true, index: proxItem });
+
       setProxItem(3);
-    } else if (proxItem === 3) {
-      navigation.navigate('ConfirmPayment');
     }
+    // else if (proxItem === 3) {
+    //   navigation.navigate('ConfirmPayment');
+    // }
   }
   function back() {
     if (proxItem === 2) {
@@ -80,32 +124,64 @@ const Payment = ({ navigation }) => {
       setProxItem(2);
     }
   }
+  async function createSale(typePayment) {
+    try {
+      const dataSale = {
+        client_id: profile.client.id,
+        total_price: 360,
+        status: 'AGUARDANDO PAGAMENTO',
+        installments: 1,
+        freight: 12,
+        payment_id: typePayment,
+        address_id: 63,
+        products: cartList,
+      };
+
+      const response = await api.post('/sales', { ...dataSale });
+      dispatch(clearCart());
+      navigation.popToTop();
+      navigation.navigate('ConfirmPayment', { id: response.id });
+    } catch (error) {
+      Alert.alert('Erro');
+    }
+  }
 
   const processPayment = [
     {
       id: 1,
       component: (
         <ItemScrollContainer>
-          <AddAddress visible={openAddAddress} closeModal={setOpenAddAddress} />
-          <ChangeAddress
-            visible={openChangeAddress}
-            closeModal={setOpenChangeAddress}
-          />
-          <Street>Rua 1, 350</Street>
-          <City>São Paulo - SP</City>
-          <Cep>05847-120</Cep>
-          <AddressButtonsContainer>
-            <UpdateAddressesButton onPress={() => setOpenChangeAddress(true)}>
-              <Icon name="home" size={20} color="#000" />
-              <UpdateAddressesButtonText>
-                Alterar endereço
-              </UpdateAddressesButtonText>
-            </UpdateAddressesButton>
-            <AddAddressesButton onPress={() => setOpenAddAddress(true)}>
-              <Icon name="add" size={20} color="#000" />
-              <AddAddressesButtonText>Add endereço</AddAddressesButtonText>
-            </AddAddressesButton>
-          </AddressButtonsContainer>
+          {loading ? (
+            <Street>Carregando...</Street>
+          ) : (
+            <>
+              <AddAddress
+                visible={openAddAddress}
+                closeModal={setOpenAddAddress}
+              />
+              <ChangeAddress
+                visible={openChangeAddress}
+                closeModal={setOpenChangeAddress}
+              />
+              <Street>{addressCurrent.street}</Street>
+              <City>{`${addressCurrent.city} - ${addressCurrent.state}`}</City>
+              <Cep>{addressCurrent.cep}</Cep>
+              <AddressButtonsContainer>
+                <UpdateAddressesButton
+                  onPress={() => setOpenChangeAddress(true)}
+                >
+                  <Icon name="home" size={20} color="#000" />
+                  <UpdateAddressesButtonText>
+                    Alterar endereço
+                  </UpdateAddressesButtonText>
+                </UpdateAddressesButton>
+                <AddAddressesButton onPress={() => setOpenAddAddress(true)}>
+                  <Icon name="add" size={20} color="#000" />
+                  <AddAddressesButtonText>Add endereço</AddAddressesButtonText>
+                </AddAddressesButton>
+              </AddressButtonsContainer>
+            </>
+          )}
         </ItemScrollContainer>
       ),
     },
@@ -119,17 +195,17 @@ const Payment = ({ navigation }) => {
           <CartContainer>
             <DataCartContainer>
               <ButtonSelectCard onPress={() => navigation.navigate('Cart')}>
-                <ItemCartName>1 Produto </ItemCartName>
+                <ItemCartName>{cartSize} Produto(s) </ItemCartName>
                 <Icon name="open-in-new" size={20} color="#000" />
               </ButtonSelectCard>
-              <PriceProductsCart>R$85,10</PriceProductsCart>
+              <PriceProductsCart>{cartSubTotal}</PriceProductsCart>
             </DataCartContainer>
             <DataCartContainer>
               <ItemCartName>Frete</ItemCartName>
               <PriceProductsCart>R$0,10</PriceProductsCart>
             </DataCartContainer>
           </CartContainer>
-          <TotalPriceSale>R$85,20</TotalPriceSale>
+          <TotalPriceSale>{cartTotal}</TotalPriceSale>
         </ItemScrollContainer>
       ),
     },
@@ -159,8 +235,13 @@ const Payment = ({ navigation }) => {
             <FormNewCreditCard
               visible={openAddCart}
               closeModal={setOpenAddCart}
+              cardSelect={cardSelect}
+              navigation={navigation}
             />
-            <ListCards setOpenAddCart={setOpenAddCart} />
+            <ListCards
+              setOpenAddCart={setOpenAddCart}
+              setCardSelect={setCardSelect}
+            />
 
             <BankSlipContainer>
               <PrinterContainer>
@@ -184,6 +265,9 @@ const Payment = ({ navigation }) => {
                   </TextBankSlipDescription>
                 </IconContainer>
               </PrinterContainer>
+              <ButtonPaySlip onPress={() => createSale(2)}>
+                <TextButtomPay>Pague com Boleto</TextButtomPay>
+              </ButtonPaySlip>
             </BankSlipContainer>
           </PaymentsContainer>
         </ItemScrollContainer>
@@ -203,13 +287,17 @@ const Payment = ({ navigation }) => {
           renderItem={({ item }) => <>{item.component}</>}
         />
         <ButtonsNextBack>
-          <ButtonController onPress={back}>
-            <Icon name="keyboard-backspace" size={50} color="#fff" />
-          </ButtonController>
+          {proxItem === 1 ? null : (
+            <ButtonController onPress={back}>
+              <Icon name="keyboard-backspace" size={50} color="#fff" />
+            </ButtonController>
+          )}
 
-          <ButtonController onPress={next}>
-            <Icon name="done" size={50} color="#fff" />
-          </ButtonController>
+          {proxItem === 3 ? null : (
+            <ButtonController onPress={next}>
+              <Icon name="done" size={50} color="#fff" />
+            </ButtonController>
+          )}
         </ButtonsNextBack>
       </Container>
     </Background>
