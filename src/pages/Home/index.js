@@ -1,5 +1,6 @@
-import React, {useEffect, useState} from 'react';
-import api from '../../services/api'
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import api from '../../services/api';
 
 import {
   Container,
@@ -16,18 +17,24 @@ import {
   TextButtonAddCard,
 } from './styles';
 import Background from '../../components/Background';
+import { addToCartRequest } from '../../store/module/cart/actions';
 
 const Home = ({ navigation }) => {
+  const dispatch = useDispatch();
   const [products, setProducts] = useState([]);
 
-  useEffect(()=>{
-    async function load(){
+  useEffect(() => {
+    async function load() {
       const resp = await api.get('/products');
       console.tron.warn(resp);
       setProducts(resp.data);
     }
     load();
-  },[]);
+  }, []);
+
+  function handleAddProduct(id) {
+    dispatch(addToCartRequest(id));
+  }
 
   return (
     <Background>
@@ -59,13 +66,14 @@ const Home = ({ navigation }) => {
               >
                 <Img
                   source={{
-                    uri: 'https://images-americanas.b2w.io/produtos/01/00/img/1227812/3/1227812329_1GG.jpg',
+                    uri:
+                      'https://images-americanas.b2w.io/produtos/01/00/img/1227812/3/1227812329_1GG.jpg',
                   }}
                 />
               </ImgContainer>
               <Name>{item.title}</Name>
               <Price>{item.price}</Price>
-              <ButtonAddCard>
+              <ButtonAddCard onPress={() => handleAddProduct(item.id)}>
                 <TextButtonAddCard>ADICIONAR AO CARRINHO</TextButtonAddCard>
               </ButtonAddCard>
             </Card>

@@ -1,6 +1,6 @@
 import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-
+import { useSelector, useDispatch } from 'react-redux';
 import Container from '../../components/Background';
 import {
   Content,
@@ -23,14 +23,35 @@ import {
   ContentEmpty,
 } from './styles';
 
-import products from '../../services/teste';
+import {
+  updateAmountRequest,
+  removeFromCart,
+} from '../../store/module/cart/actions';
 
 function Cart({ navigation }) {
+  const dispatch = useDispatch();
+
+  const cart = useSelector((state) =>
+    state.cart.cart.map((product) => ({
+      ...product,
+      subTotal: product.price * product.amount,
+    }))
+  );
+
+  function decrement(product) {
+    dispatch(updateAmountRequest(product.id, product.amount - 1));
+  }
+  function increment(product) {
+    dispatch(updateAmountRequest(product.id, product.amount + 1));
+  }
+  function handleRemoveFromCart(id) {
+    dispatch(removeFromCart(id));
+  }
   return (
     <Container>
       <Content>
         <CartList
-          data={products}
+          data={cart}
           keyExtractor={(c) => c.id.toString()}
           renderItem={({ item }) => (
             <>
@@ -41,21 +62,22 @@ function Cart({ navigation }) {
                     <DecriptionText>{item.title}</DecriptionText>
                     <Value>{item.price}</Value>
                   </Decription>
-                  <ButtonTouch onPress={() => {}}>
+                  <ButtonTouch onPress={() => handleRemoveFromCart(item.id)}>
                     <Icon name="delete" size={25} color="#de4e3a" />
                   </ButtonTouch>
                 </Info>
                 <AmountContainer>
                   <InputContainer>
-                    <ButtonTouch onPress={() => {}}>
+                    <ButtonTouch onPress={() => decrement(item)}>
                       <Icon name="remove-circle" size={30} color="#de4e3a" />
                     </ButtonTouch>
                     <Input
                       editable={false}
                       keyboardType="numeric"
-                      value={`${25}`}
+                      value={item.amount.toString()}
                     />
-                    <ButtonTouch onPress={() => {}}>
+
+                    <ButtonTouch onPress={() => increment(item)}>
                       <Icon name="add-circle" size={30} color="#de4e3a" />
                     </ButtonTouch>
                   </InputContainer>
