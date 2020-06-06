@@ -36,6 +36,7 @@ const SignIn = ({ navigation }) => {
             placeholder="Informe sua senha"
             value={password}
             onChangeText={setPassword}
+            secureTextEntry
           />
           <Button onPress={submit}>
             <TextButton>LOGIN</TextButton>

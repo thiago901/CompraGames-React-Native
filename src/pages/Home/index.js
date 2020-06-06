@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import api from '../../services/api';
 import { formatNumber } from '../../util/format';
 
@@ -25,6 +25,7 @@ import { signOutRequest } from '../../store/module/auth/actions';
 
 const Home = ({ navigation }) => {
   const dispatch = useDispatch();
+  const signed = useSelector((state) => state.auth.signed);
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -46,6 +47,10 @@ const Home = ({ navigation }) => {
   function handleLogout() {
     dispatch(signOutRequest());
   }
+  function handleLogin() {
+    navigation.navigate('SignIn');
+  }
+
   return (
     <Background>
       <Container>
@@ -60,10 +65,17 @@ const Home = ({ navigation }) => {
           <TextMenu>Consoles</TextMenu>
           <TextMenu>Promoções</TextMenu>
           <TextMenu>Novidades</TextMenu>
-          <ButtonLogout onPress={handleLogout}>
-            <TextMenu rightMargin={10}>Sair</TextMenu>
-            <Icon name="exit-to-app" color="#222" size={30} />
-          </ButtonLogout>
+          {signed ? (
+            <ButtonLogout onPress={handleLogout}>
+              <TextMenu rightMargin={10}>Sair</TextMenu>
+              <Icon name="exit-to-app" color="#fff" size={30} />
+            </ButtonLogout>
+          ) : (
+            <ButtonLogout onPress={handleLogin}>
+              <TextMenu rightMargin={10}>Login</TextMenu>
+              <Icon name="exit-to-app" color="#fff" size={30} />
+            </ButtonLogout>
+          )}
         </Menu>
 
         <Products

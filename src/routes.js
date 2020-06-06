@@ -29,20 +29,6 @@ export default function routes() {
           {!signed ? (
             <>
               <Stack.Screen
-                name="SignIn"
-                component={SignIn}
-                options={({ navigation }) => ({
-                  headerShown: false,
-                })}
-              />
-              <Stack.Screen
-                name="SignUp"
-                component={SignUp}
-                options={({ navigation }) => ({
-                  headerShown: false,
-                })}
-              />
-              <Stack.Screen
                 name="Home"
                 component={Home}
                 options={({ navigation }) => ({
@@ -73,6 +59,20 @@ export default function routes() {
                   headerRight: () => <HeaderLeft navigation={navigation} />,
                   headerTitle: false,
                   headerBackTitle: false,
+                })}
+              />
+              <Stack.Screen
+                name="SignIn"
+                component={SignIn}
+                options={({ navigation }) => ({
+                  headerShown: false,
+                })}
+              />
+              <Stack.Screen
+                name="SignUp"
+                component={SignUp}
+                options={({ navigation }) => ({
+                  headerShown: false,
                 })}
               />
             </>
