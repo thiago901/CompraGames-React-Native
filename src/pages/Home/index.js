@@ -50,6 +50,12 @@ const Home = ({ navigation }) => {
   function handleLogin() {
     navigation.navigate('SignIn');
   }
+  function handleImgMain(images) {
+    const imgs = images.filter((f) => f.main === true);
+    const url = imgs.map((a) => a.url);
+
+    return url[0];
+  }
 
   return (
     <Background>
@@ -93,7 +99,8 @@ const Home = ({ navigation }) => {
                 <Img
                   source={{
                     uri:
-                      'https://images-americanas.b2w.io/produtos/01/00/img/1227812/3/1227812329_1GG.jpg',
+                      // 'https://images-americanas.b2w.io/produtos/01/00/img/1227812/3/1227812329_1GG.jpg',
+                      handleImgMain(item.images),
                   }}
                 />
               </ImgContainer>

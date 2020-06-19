@@ -23,15 +23,25 @@ const Product = ({ navigation, route }) => {
   const { product_id } = route.params;
   const [product, setProduct] = useState({});
 
+  function handleImgMain(images) {
+    const imgs = images.filter((f) => f.main === true);
+    const url = imgs.map((a) => a.url);
+
+    return url[0];
+  }
   useEffect(() => {
     async function load() {
       const resp = await api.get(`/products/${product_id}`);
-      setProduct(resp.data);
-      console.tron.log(resp.data.faqs.length);
+      const data = {
+        ...resp.data,
+        imageTitle: handleImgMain(resp.data.images),
+      };
+      setProduct(data);
     }
 
     load();
   }, []);
+
   return (
     <Background>
       <Container>
@@ -39,7 +49,8 @@ const Product = ({ navigation, route }) => {
           <ImgProduct
             source={{
               uri:
-                'https://images-americanas.b2w.io/produtos/01/00/img/1227812/3/1227812329_1GG.jpg',
+                // 'https://images-americanas.b2w.io/produtos/01/00/img/1227812/3/1227812329_1GG.jpg',
+                product.imageTitle,
             }}
           />
           <TitleProduct>{product.title}</TitleProduct>
