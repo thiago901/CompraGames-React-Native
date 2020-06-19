@@ -33,11 +33,18 @@ import {
 function Cart({ navigation }) {
   const dispatch = useDispatch();
 
+  function handleImgMain(images) {
+    const imgs = images.filter((f) => f.main === true);
+    const url = imgs.map((a) => a.url);
+
+    return url[0];
+  }
   const cart = useSelector((state) =>
     state.cart.cart.map((product) => ({
       ...product,
       formatPrice: formatNumber(product.price),
       subTotal: formatNumber(product.price * product.amount),
+      imageTitle: handleImgMain(product.images),
     }))
   );
   const cartTotal = formatNumber(
@@ -71,7 +78,7 @@ function Cart({ navigation }) {
               <>
                 <Product>
                   <Info>
-                    <Image source={{ uri: item.images[0].image }} />
+                    <Image source={{ uri: item.imageTitle }} />
                     <Decription>
                       <DecriptionText>{item.title}</DecriptionText>
                       <Value>{item.formatPrice}</Value>
